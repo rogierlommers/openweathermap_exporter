@@ -1,43 +1,31 @@
 # Openweather exporter for prometheus
 
+Fetch weather data from openweathernap.org and expose as prometheus scrapable endpoint.
 
-Exporter for openweather API 
+## How to run exporter in a docker container
 
+- Create an API key from https://openweathermap.org/.
+- Run container using the example docker run command below.
+- Add the endpoint to your prometheus instance; see below example.
 
-## Quickstart
-
-Create an API key from https://openweathermap.org/.
-
-Install dependancies with `go get` and then build the binary.
+### Docker run command
 
 ```
-go get -d -v
-go build
-OWM_LOCATION=LONDON,UK  OWM_API_KEY=apikey ./openweathermap_exporter
+docker run --name openweather-exporter \
+          --rm \
+          --env OWM_LOCATION=NIJMEGEN,NK \
+          --env OWM_API_KEY=apikey \
+          --ENV OWM_DELAY_IN_SECONDS=5 \
+          --publish 2112:2112 \
+          ows
 ```
 
-Then add the scraper in prometheus
+### Prometheus scrape config
 
 ```
 scrape_configs:
   - job_name: 'weather'
-
-    # Scrape is configured for free usage.
     scrape_interval: 60s
-
-    # Port is not yet configurable
     static_configs:
       - targets: ['localhost:2112']
 ```
-
-
-
-## With Docker
-
-The image is a multistage image, just launch as usual :
-
-```
-docker build -t ows .
-docker run --rm -e OWM_LOCATION=LONDON,UK  -e OWM_API_KEY=apikey -p 2112:2112 ows
-```
-

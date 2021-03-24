@@ -1,0 +1,6 @@
+#!/bin/bash
+
+OWM_LOCATION=NIJMEGEN,NL \
+OWM_DELAY_IN_SECONDS=5 \
+OWM_API_KEY= \
+go run *.go
